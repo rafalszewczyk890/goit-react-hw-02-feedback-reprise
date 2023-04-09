@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import Statistics from './Statistics';
-import FeedbackOptions from './FeedbackOptions';
+import { Statistics } from './Statistics';
+import { FeedbackOptions } from './FeedbackOptions';
 import Section from './Section';
 import Notification from './Notification';
+import { FeedbackContext } from './FeedbackContext';
 
 const App = () => {
   const [good, setGood] = useState(0);
@@ -31,25 +32,27 @@ const App = () => {
 
   return (
     <>
-      <Section title="Please leave your feedback">
-        <FeedbackOptions
-          options={['good', 'neutral', 'bad']}
-          onLeaveFeedback={handleFeedback}
-        />
-      </Section>
-      <Section title="Statistics">
-        {countTotalFeedback() === 0 ? (
-          <Notification message="No feedback provided" />
-        ) : (
-          <Statistics
-            good={good}
-            neutral={neutral}
-            bad={bad}
-            total={countTotalFeedback()}
-            positivePercentage={countPositiveFeedbackPercentage()}
-          />
-        )}
-      </Section>
+      <FeedbackContext.Provider
+        value={{
+          good: good,
+          neutral: neutral,
+          bad: bad,
+          countTotalFeedback: countTotalFeedback(),
+          countPositiveFeedbackPercentage: countPositiveFeedbackPercentage(),
+          onLeaveFeedback: handleFeedback,
+        }}
+      >
+        <Section title="Please leave your feedback">
+          <FeedbackOptions />
+        </Section>
+        <Section title="Statistics">
+          {countTotalFeedback() === 0 ? (
+            <Notification message="No feedback provided" />
+          ) : (
+            <Statistics />
+          )}
+        </Section>
+      </FeedbackContext.Provider>
     </>
   );
 };

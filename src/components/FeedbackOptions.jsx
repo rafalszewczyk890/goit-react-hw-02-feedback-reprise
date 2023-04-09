@@ -1,18 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { useFeedback } from './FeedbackContext';
 
-export default class FeedbackOptions extends Component {
-  render() {
-    const { options, onLeaveFeedback } = this.props;
-    return (
-      <div>
-        {options.map(option => {
-          return (
-            <button name={option} onClick={onLeaveFeedback}>
-              {option}
-            </button>
-          );
-        })}
-      </div>
-    );
-  }
-}
+export const FeedbackOptions = () => {
+  const { onLeaveFeedback } = useFeedback();
+
+  const options = ['good', 'neutral', 'bad'];
+  return (
+    <div>
+      {options.map(option => {
+        return (
+          <button name={option} onClick={onLeaveFeedback}>
+            {option}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
